@@ -38,7 +38,7 @@
               </div>
               <div class="mb-3">
                 <label for="fas_description" class="form-label">Deskripsi Fasilitas</label>
-                <textarea rows="5" required maxlength="500" type="text" name="fas_description" class="form-control" id="fas_description"></textarea>
+                <textarea rows="5" required maxlength="1000" type="text" name="fas_description" class="form-control" id="fas_description"></textarea>
               </div>
               <div class="mb-3">
                 <label for="fas_hour" class="form-label">Jam Layanan</label>
@@ -73,17 +73,17 @@
         </tr>
       </thead>
       <tbody>
-        <?php $i = 1;foreach ($rooms as $t) :?>
+        <?php $i = 1;foreach ($facilitations as $t) :?>
           <tr>
             <th scope="row"><?= $i ?></th>
             <td><b><?= $t['fas_type'] ?></b><br><?= $t['fas_class'] ?><br><b><?= $t['fas_name'] ?></b></td>
             <td><?= $t['fas_description'] ?><br><b><?= $t['fas_hour'] ?></b></td>
             <td>
-                <img width="100" src="<?= base_url('assets/img/rooms/'.$t['fas_photo']) ?>">
+                <img width="100" src="<?= base_url('assets/img/facilitations/'.$t['fas_photo']) ?>">
             </td>
             <td>
-              <a href="#" onclick="edit('rooms', this)" data-id="<?= $i-1?>" data-bs-toggle="modal" data-bs-target="#roomModal" class="btn btn-primary mb-2"><i class="fas fa-edit fa-fw"></i></a>
-              <a href="<?= base_url('admin/delete/rooms/'.encrypt_url($t['id_facilitation'])) ?>" onclick="return confirm('Yakin menghapus tipe kamar ini?')" class="btn btn-danger mb-2"><i class="fas fa-trash fa-fw"></i></a>
+              <a href="#" onclick="edit('facilitations', this)" data-id="<?= $i-1?>" data-bs-toggle="modal" data-bs-target="#fasModal" class="btn btn-primary mb-2"><i class="fas fa-edit fa-fw"></i></a>
+              <a href="<?= base_url('admin/delete/facilitations/'.encrypt_url($t['id_facilitation'])) ?>" onclick="return confirm('Yakin menghapus fasilitas ini?')" class="btn btn-danger mb-2"><i class="fas fa-trash fa-fw"></i></a>
             </td>
           </tr>
         <?php $i++;endforeach?>

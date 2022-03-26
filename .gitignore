@@ -2,6 +2,9 @@
 
 assets/vendor
 assets/img/rooms
+assets/img/facilitations
+
+application/config/production
 
 .DS_Store
 

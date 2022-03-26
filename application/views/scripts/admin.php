@@ -32,7 +32,8 @@
     id      = $(e).data('id')
 
     if (content_type == 'rooms') {
-      content = <?= json_encode($rooms) ?>
+      console.log('y')
+      content = <?= isset($rooms) ? json_encode($rooms) : '' ?>
 
       $('#id_room').val(content[id].id_room)
       $('#roomModalLabel').html('Ubah Tipe Kamar')
@@ -46,6 +47,17 @@
       if (content[id].nosmoking == 1) document.getElementById('nosmoking').checked = true
       if (content[id].breakfast == 1) document.getElementById('breakfast').checked = true
       document.getElementById(content[id].bed).checked = true
+    } else if (content_type == 'facilitations') {
+      content = <?= isset($facilitations) ? json_encode($facilitations) : '' ?>
+
+      $('#id_facilitation').val(content[id].id_facilitation)
+      $('#fasModalLabel').html('Ubah Fasilitas')
+      $('#fas_type').val(content[id].fas_type)
+      $('#fas_class').val(content[id].fas_class)
+      $('#fas_name').val(content[id].fas_name)
+      $('#fas_description').val(content[id].fas_description)
+      $('#fas_hour1').val(content[id].fas_hour.split(' - ')[0])
+      $('#fas_hour2').val(content[id].fas_hour.split(' - ')[1])
     }
 
     $('#photo').removeAttr('required')

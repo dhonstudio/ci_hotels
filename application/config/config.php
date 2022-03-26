@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 
-    ENVIRONMENT == 'development' ? 'http://localhost/ci_hotel/' : 
+    ENVIRONMENT == 'development' ? 'http://localhost/ci_hotels/' : 
     (ENVIRONMENT == 'testing' ? 'http://dev.dhonstudio.com/ci/hotel/' : 'https://dhonstudio.com/ci/hotel/');
 
 /*

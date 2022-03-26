@@ -11,25 +11,14 @@ class Admin extends CI_Controller {
 
         require_once __DIR__ . '/../../assets/ci_helpers/urlencryptor_helper.php';
         require_once __DIR__ . '/../../assets/ci_helpers/style_helper.php';
-        require_once __DIR__ . '/../../assets/ci_libraries/DhonAPI.php';
 		require_once __DIR__ . '/../../assets/ci_libraries/DhonAuth.php';
-		$this->dhonapi = new DhonAPI;
 		$this->dhonauth = new DhonAuth;
 
-        $this->dhonapi->api_url['development'] 	= 'http://localhost/ci_hotel_api/';
-		$this->dhonapi->api_url['production'] 	= 'https://dhonstudio.com/ci/hotel_api/';
-		$this->dhonapi->username 				= 'admin';
-		$this->dhonapi->password 				= 'admin';
+        $this->dhonapi = ENVIRONMENT == 'testing' ? $this->load->database('hotel_dev', TRUE) : $this->load->database('hotel', TRUE);
 
-        /*
-        | -------------------------------------------------------------------
-        |  Set up this API db
-        | -------------------------------------------------------------------
-        */
-        $this->database = ENVIRONMENT == 'testing' ? 'hotel_dev' : 'hotel';
+		$user = $this->dhonapi->get_where('api_users', ['username' => $_SERVER['PHP_AUTH_USER']])->result_array();
 
-		$user = $this->dhonapi->get($this->database, 'api_users', ['username' => $_SERVER['PHP_AUTH_USER']]);
-
+        if ($_SERVER['PHP_AUTH_USER'] == 'receptionist') $this->dhonauth->unauthorized();
 		$this->dhonauth->auth('', $user[0]);
 
         $this->language['active'] = 'en';
@@ -81,7 +70,7 @@ class Admin extends CI_Controller {
 
                 'page'      => 'Tipe Kamar',
 
-                'rooms'     => $this->dhonapi->get($this->database, 'rooms'),
+                'rooms'     => $this->dhonapi->get('rooms')->result_array(),
             ];
 
             $this->load->view("ci_templates/header", $data);
@@ -91,21 +80,23 @@ class Admin extends CI_Controller {
             $this->load->view("scripts/admin");
             $this->load->view("ci_templates/end");
         } else {
+            $ac   = $this->input->post('ac') ? $this->input->post('ac') : 0; 
+            $wifi   = $this->input->post('wifi') ? $this->input->post('wifi') : 0; 
+            $nosmoking   = $this->input->post('nosmoking') ? $this->input->post('nosmoking') : 0; 
+            $breakfast   = $this->input->post('breakfast') ? $this->input->post('breakfast') : 0; 
+
             $data_insert = [
                 'room_name'         => $this->input->post('room_name'),
+                'room_slogan'   => $this->input->post('room_slogan'),
                 'room_description'   => $this->input->post('room_description'),
                 'room_total'   => $this->input->post('room_total'),
                 'room_price'   => $this->input->post('room_price'),
-                'ac'   => $this->input->post('ac'),
-                'wifi'   => $this->input->post('wifi'),
-                'nosmoking'   => $this->input->post('nosmoking'),
-                'breakfast'   => $this->input->post('breakfast'),
+                'ac'   => $ac,
+                'wifi'   => $wifi,
+                'nosmoking'   => $nosmoking,
+                'breakfast'   => $breakfast,
                 'bed'   => $this->input->post('bed'),
             ];
-
-            if ($this->input->post('id_room')) {
-                $data_insert['id_room']  = $this->input->post('id_room');
-            }
             
             if ($_FILES['image']['name']) {
                 $config['allowed_types']	= 'jpg|jpeg|png|svg';
@@ -151,7 +142,14 @@ class Admin extends CI_Controller {
                 }                
             }
 
-            $this->dhonapi->post($this->database, 'rooms', $data_insert);
+            if ($this->input->post('id_room')) {
+                $data_insert['id_room']  = $this->input->post('id_room');
+                $data_insert['modified_at']  = time();
+                $this->dhonapi->update('rooms', $data_insert, ['id_room' => $data_insert['id_room']]);
+            } else {
+                $data_insert['created_at']  = time();
+                $this->dhonapi->insert('rooms', $data_insert);
+            }
             redirect('admin/rooms');
         }
     }
@@ -174,9 +172,9 @@ class Admin extends CI_Controller {
                     $this->js['sb-admin'],
                 ],
 
-                'page'      => 'Fasilitas',
+                'page'          => 'Fasilitas',
 
-                'rooms'     => $this->dhonapi->get($this->database, 'facilitations'),
+                'facilitations' => $this->dhonapi->get('facilitations')->result_array(),
             ];
 
             $this->load->view("ci_templates/header", $data);
@@ -191,7 +189,7 @@ class Admin extends CI_Controller {
                 'fas_class'   => $this->input->post('fas_class'),
                 'fas_name'   => $this->input->post('fas_name'),
                 'fas_description'   => $this->input->post('fas_description'),
-                'fas_hour'   => $this->input->post('fas_hour1').' to '.$this->input->post('fas_hour2'),
+                'fas_hour'   => $this->input->post('fas_hour1').' - '.$this->input->post('fas_hour2'),
             ];
 
             if ($this->input->post('id_facilitation')) {
@@ -220,55 +218,8 @@ class Admin extends CI_Controller {
                 }                
             }
 
-            $this->dhonapi->post($this->database, 'facilitations', $data_insert);
+            $this->dhonapi->insert('facilitations', $data_insert);
             redirect('admin/facilitations');
-        }
-    }
-
-    public function content()
-	{
-        $this->form_validation->set_rules('hotel_name', 'Hotel Name', 'trim|min_length[2]|max_length[200]');
-
-        $content = $this->dhonapi->get($this->database, 'web_content', ['id_content' => 1])[0];
-
-        if($this->form_validation->run() == false) {
-            $data = [
-                'title'	    => 'Content Manager - Hotel',
-                'css'       => [
-                    $this->css['sb-admin'],
-                    $this->css['fontawesome5'],
-                ],
-                'body_class'    => 'sb-nav-fixed',
-                'js'            => [
-                    $this->js['bootstrap-bundle5'],
-                    $this->js['sb-admin'],
-                ],
-
-                'page'      => 'Dashboard',
-
-                'content'   => $content,
-            ];
-
-            $this->load->view("ci_templates/header", $data);
-            $this->load->view("admin/topbar");
-            $this->load->view("admin/sidebar");
-            $this->load->view("admin/content");
-            $this->load->view("ci_templates/end");
-        } else {
-            $hotel_name = $this->input->post('hotel_name') ? $this->input->post('hotel_name') : $content['hotel_name'];
-            $welcome_text = $this->input->post('welcome_text') ? $this->input->post('welcome_text') : $content['welcome_text'];
-            $welcome_text2 = $this->input->post('welcome_text2') ? $this->input->post('welcome_text2') : $content['welcome_text2'];
-            $welcome_description = $this->input->post('welcome_description') ? $this->input->post('welcome_description') : $content['welcome_description'];
-
-            $this->dhonapi->post($this->database, 'web_content', [
-                'hotel_name' => $hotel_name,
-                'welcome_text' => $welcome_text,
-                'welcome_text2' => $welcome_text2,
-                'welcome_description' => $welcome_description,
-                'id_content' => 1,
-            ]);
-
-            redirect('admin/content');
         }
     }
 
@@ -276,7 +227,7 @@ class Admin extends CI_Controller {
     {
         $id = decrypt_url($id_encrypt);
 
-        $this->dhonapi->delete($this->database, $content_type, $id);
+        $this->dhonapi->delete($content_type, ['id_'.rtrim($content_type, 's') => $id]);
         redirect('admin/'.$content_type);
     }
 

@@ -77,25 +77,25 @@
               <div class="mb-3">
                 <label for="room_price" class="form-label">Tempat Tidur</label>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="bed" id="singlebed" value="singlebed">
+                  <input required class="form-check-input" type="radio" name="bed" id="singlebed" value="singlebed">
                   <label class="form-check-label" for="singlebed">
                     Single Bed
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="bed" id="twinbed" value="twinbed">
+                  <input required class="form-check-input" type="radio" name="bed" id="twinbed" value="twinbed">
                   <label class="form-check-label" for="twinbed">
                     Twin Bed
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="bed" id="queenbed" value="queenbed">
+                  <input required class="form-check-input" type="radio" name="bed" id="queenbed" value="queenbed">
                   <label class="form-check-label" for="queenbed">
                     Queen Bed
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="bed" id="kingbed" value="kingbed">
+                  <input required class="form-check-input" type="radio" name="bed" id="kingbed" value="kingbed">
                   <label class="form-check-label" for="kingbed">
                     King Bed
                   </label>
