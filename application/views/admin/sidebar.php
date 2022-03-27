@@ -11,7 +11,7 @@
             ],
         ],
         [
-            'heading'       => 'Manage',
+            'heading'       => 'Kelola',
             'subheading'    => [
                 [
                     'title'     => 'Tipe Kamar',

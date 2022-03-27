@@ -174,7 +174,7 @@ class Home extends CI_Controller {
     public function success()
 	{
         $data   = [
-            'title'         => 'Hotel - Ketersediaan',
+            'title'         => 'Reservasi Berhasil - Hotel',
             'body_class'    => '',
             'css'           => [
                 '<link rel="stylesheet" href="'.base_url('assets/vendor/luxe/').'css/superfish.css">
@@ -191,7 +191,7 @@ class Home extends CI_Controller {
             'js'            => [
                 $this->js['jquery36']
             ],
-            'page'          => 'Ketersediaan',
+            'page'          => 'Reservasi Berhasil',
 
         ];
 

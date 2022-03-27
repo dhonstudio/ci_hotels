@@ -5,90 +5,26 @@
             'subheading'    => [
                 [
                     'title' => 'Dashboard',
-                    'url'   => '',
+                    'url'   => 'receptionist',
                     'icon'  => 'fas fa-tachometer-alt'
                 ],
             ],
         ],
         [
-            'heading'       => 'Addons',
+            'heading'       => 'Reservasi',
             'subheading'    => [
                 [
-                    'title'     => 'Charts',
-                    'url'       => 'home/dashboard_charts',
-                    'icon'      => 'fas fa-chart-area',
+                    'title'     => 'Cari Reservasi',
+                    'url'       => 'receptionist/search',
+                    'icon'      => 'fas fa-search',
                 ],
                 [
-                    'title'     => 'Tables',
-                    'url'       => 'tables.html',
+                    'title'     => 'Ketersediaan',
+                    'url'       => 'receptionist/availability',
                     'icon'      => 'fas fa-table',
                 ],
             ],
         ],
-        [
-            'heading'       => 'Interface',
-            'subheading'    => [
-                [
-                    'title'     => 'Layouts',
-                    'url'       => '#',
-                    'icon'      => 'fas fa-columns',
-                    'subtitle'  => [
-                        [
-                            'title' => 'Static Navigation',
-                            'url'   => 'layout-static.html'
-                        ],
-                        [
-                            'title' => 'Light Sidenav',
-                            'url'   => 'layout-sidenav-light.html'
-                        ],
-                    ]
-                ],
-                [
-                    'title'     => 'Pages',
-                    'url'       => '#',
-                    'icon'      => 'fas fa-book-open',
-                    'subtitle'  => [
-                        [
-                            'title'     => 'Authentication',
-                            'url'       => '#',
-                            'subpage'   => [
-                                [
-                                    'title' => 'Login',
-                                    'url'   => 'login.html'
-                                ],
-                                [
-                                    'title' => 'Register',
-                                    'url'   => 'register.html'
-                                ],
-                                [
-                                    'title' => 'Forgot Password',
-                                    'url'   => 'password.html'
-                                ],
-                            ]
-                        ],
-                        [
-                            'title'     => 'Error',
-                            'url'       => '#',
-                            'subpage'   => [
-                                [
-                                    'title' => '401 Page',
-                                    'url'   => '401.html'
-                                ],
-                                [
-                                    'title' => '404 Page',
-                                    'url'   => '404.html'
-                                ],
-                                [
-                                    'title' => '500 Page',
-                                    'url'   => '500.html'
-                                ],
-                            ]
-                        ],
-                    ]
-                ],
-            ],
-        ],
-        
     ]
 ?>
 
