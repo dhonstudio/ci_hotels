@@ -1,6 +1,7 @@
 .vscode
 
-assets/vendor
+assets/vendor/*
+!assets/vendor/luxe
 assets/img/rooms
 assets/img/facilitations
 

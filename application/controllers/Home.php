@@ -103,6 +103,7 @@ class Home extends CI_Controller {
             } else if ($status == 'booking') {
                 $guest_name = $this->input->post('guest_name');
                 $guest_email = $this->input->post('guest_email');
+                $reservation_code = $this->input->post('reservation_code');
 
                 $guest_av = $this->dhonapi->get_where('guests', ['guest_name' => $guest_name, 'guest_email' => $guest_email])->row_array();
 
@@ -121,14 +122,14 @@ class Home extends CI_Controller {
                 $this->dhonapi->update('reservations', [
                     'is_active' => 1,
                     'id_guest' => $id_guest,
-                ], ['reservation_code' => $this->input->post('reservation_code')]);
+                ], ['reservation_code' => $reservation_code]);
 
                 $this->dhonapi->update('room_reservations', [
                     'is_active' => 1,
                     'id_guest' => $id_guest,
-                ], ['reservation_code' => $this->input->post('reservation_code')]);      
+                ], ['reservation_code' => $reservation_code]);      
                 
-                redirect('home/ketersediaan/success');
+                redirect('home/ketersediaan/success/'.encrypt_url($reservation_code));
             }
         } else {
             redirect('home/ketersediaan/tidaktersedia');
@@ -202,4 +203,16 @@ class Home extends CI_Controller {
         $this->load->view('scripts/home');  
         $this->load->view('ci_templates/end');
 	}
+
+    public function reservation_pdf($reservation_code)
+    {
+        $reservation_code = decrypt_url($reservation_code);
+        $reservation = $this->dhonapi->join('rooms', 'rooms.id_room = reservations.id_room')->join('guests', 'guests.id_guest = reservations.id_guest')->get_where('reservations', ['reservation_code' => $reservation_code])->row_array();
+
+        $data = [
+            'reservation' => $reservation,
+        ];
+
+        $this->load->view('luxe/reservation_pdf', $data);
+    }
 }

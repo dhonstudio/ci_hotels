@@ -20,6 +20,7 @@
 			<div class="col-md-8">
 				<div class="col-md-12">
 					<h3 class="text-center">Reservasi Anda Berhasil Direkam</h3>
+					<p>Silahkan simpan kode booking ini: <b style="font-size: 25px;color:black"><?= $reservation['reservation_code'] ?></b> atau cetak <a href="<?= base_url('home/reservation_pdf/'.encrypt_url($reservation['reservation_code'])) ?>" target="_blank">Bukti Reservasi</a>.</p>
 					<p>Terima kasih atas reservasi anda.</p>
 				</div>
 			</div>
