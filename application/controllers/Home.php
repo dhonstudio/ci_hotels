@@ -48,8 +48,44 @@ class Home extends CI_Controller {
         $this->load->view('ci_templates/end');
 	}
 
+    private function _redirect() {
+        if (ENVIRONMENT == 'development') {
+            $this->cookie_prefix    = 'm';
+            $this->auth_redirect    = base_url('auth?id_room='.encrypt_url($this->input->post('id_room')).'&start_date='.$this->input->post('start_date').'&end_date='.$this->input->post('end_date').'&total_room='.$this->input->post('total_room'));
+        } else if (ENVIRONMENT == 'testing') {
+            $this->cookie_prefix    = 'm';
+            $this->auth_redirect    = 'http://dev....';
+        } else {
+            $this->cookie_prefix    = '__Secure-';
+            $this->auth_redirect    = 'https://...';
+        }
+        $this->secure_prefix    = 'DSC280322s';
+        $this->secure_auth      = "DSA280322k";
+
+        $this->load->helper('cookie');
+        if ($this->input->cookie("{$this->cookie_prefix}{$this->secure_auth}") && $this->input->cookie("{$this->cookie_prefix}{$this->secure_prefix}")) {
+            
+            $this->load->library('encryption');
+
+            $auth_key   = $this->encryption->decrypt($this->input->cookie("{$this->cookie_prefix}{$this->secure_auth}"));
+            $this->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'ctr',
+                    'key' => $auth_key
+                )
+            );
+            $id         = $this->encryption->decrypt($this->input->cookie("{$this->cookie_prefix}{$this->secure_prefix}"));
+            $this->user = $this->dhonapi->get_where('user_ci', ['id' => $id])->result_array()[0];
+        } else {
+            redirect($this->auth_redirect);
+        } 
+    }
+
     public function check_availability($status = '')
 	{
+        $this->_redirect();
+
         $id_room            = $this->input->post('id_room');
         if ($status == '') {
             $start_date         = date('Ymd', strtotime($this->input->post('start_date')));
@@ -138,6 +174,8 @@ class Home extends CI_Controller {
 
     public function ketersediaan($status, $reservation_code = '')
 	{
+        $this->_redirect();
+        
         $reservation_code = decrypt_url($reservation_code);
         $reservation = $this->dhonapi->join('rooms', 'rooms.id_room = reservations.id_room')->get_where('reservations', ['reservation_code' => $reservation_code])->row_array();
 

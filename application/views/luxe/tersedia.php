@@ -41,13 +41,13 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									Nama Lengkap
-									<input name="guest_name" required type="text" class="form-control" placeholder="">
+									<input name="guest_name" required type="text" class="form-control" placeholder="" value="<?= $this->user['fullName'] ?>">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 									Email
-									<input name="guest_email" required type="email" class="form-control" placeholder="">
+									<input name="guest_email" required type="email" class="form-control" placeholder="" value="<?= $this->user['email'] ?>">
 								</div>
 							</div>
 							<div class="col-md-12">
