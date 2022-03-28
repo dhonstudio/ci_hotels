@@ -191,10 +191,6 @@ class Admin extends CI_Controller {
                 'fas_description'   => $this->input->post('fas_description'),
                 'fas_hour'   => $this->input->post('fas_hour1').' - '.$this->input->post('fas_hour2'),
             ];
-
-            if ($this->input->post('id_facilitation')) {
-                $data_insert['id_facilitation']  = $this->input->post('id_facilitation');
-            }
             
             if ($_FILES['image']['name']) {
                 $config['allowed_types']	= 'jpg|jpeg|png|svg';
@@ -218,7 +214,14 @@ class Admin extends CI_Controller {
                 }                
             }
 
-            $this->dhonapi->insert('facilitations', $data_insert);
+            if ($this->input->post('id_facilitation')) {
+                $data_insert['id_facilitation']  = $this->input->post('id_facilitation');
+                $data_insert['modified_at']  = time();
+                $this->dhonapi->update('facilitations', $data_insert, ['id_facilitation' => $data_insert['id_facilitation']]);
+            } else {
+                $data_insert['created_at']  = time();
+                $this->dhonapi->insert('facilitations', $data_insert);
+            }
             redirect('admin/facilitations');
         }
     }
