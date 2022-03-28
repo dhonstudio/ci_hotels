@@ -175,7 +175,7 @@ class Home extends CI_Controller {
     public function ketersediaan($status, $reservation_code = '')
 	{
         $this->_redirect();
-        
+
         $reservation_code = decrypt_url($reservation_code);
         $reservation = $this->dhonapi->join('rooms', 'rooms.id_room = reservations.id_room')->get_where('reservations', ['reservation_code' => $reservation_code])->row_array();
 

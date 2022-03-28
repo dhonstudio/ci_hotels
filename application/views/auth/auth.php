@@ -7,7 +7,7 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
                                     <div class="card-body">
-                                        <form method="post" action="<?= base_url('auth?id_room='.encrypt_url($_GET['id_room']).'&start_date='.$_GET['start_date'].'&end_date='.$_GET['end_date'].'&total_room='.$_GET['total_room']) ?>">
+                                        <form method="post" action="<?= base_url('auth?id_room='.$_GET['id_room'].'&start_date='.$_GET['start_date'].'&end_date='.$_GET['end_date'].'&total_room='.$_GET['total_room']) ?>">
                                             <div class="form-floating mb-3">
                                                 <input name="email" value="<?= set_value('email');?>" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
                                                 <label for="inputEmail">Email address</label>

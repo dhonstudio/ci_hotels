@@ -162,11 +162,13 @@ class Auth extends CI_Controller {
         } else {
             $user = $this->dhonapi->get_where($this->table, ['email' => $this->input->post('email')])->result_array();
             if (!empty($user) && password_verify($this->input->post('password'), $user[0]['password_hash']) && $user[0]['status'] > 9) {
+                $id_room = decrypt_url($_GET['id_room']);
+
                 $this->_login($user);
 
-                redirect('auth/redirect_post?action=home/check_availability&post_name1=id_room&post_value1='.decrypt_url($_GET['id_room']).'&post_name2=start_date&post_value2='.$_GET['start_date'].'&post_name3=end_date&post_value3='.$_GET['end_date'].'&post_name4=total_room&post_value4='.$_GET['total_room']);
+                redirect('auth/redirect_post?action=home/check_availability&post_name1=id_room&post_value1='.$id_room.'&post_name2=start_date&post_value2='.$_GET['start_date'].'&post_name3=end_date&post_value3='.$_GET['end_date'].'&post_name4=total_room&post_value4='.$_GET['total_room']);
             } else {
-                redirect('auth?id_room='.encrypt_url($_GET['id_room']).'&start_date='.$_GET['start_date'].'&end_date='.$_GET['end_date'].'&total_room='.$_GET['total_room']);
+                redirect('auth?id_room='.$_GET['id_room'].'&start_date='.$_GET['start_date'].'&end_date='.$_GET['end_date'].'&total_room='.$_GET['total_room']);
             }
         }
 	}
