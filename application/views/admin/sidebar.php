@@ -23,6 +23,11 @@
                     'url'       => 'admin/facilitations',
                     'icon'      => 'fas fa-swimmer',
                 ],
+                [
+                    'title'     => 'Resepsionis',
+                    'url'       => 'admin/receptionist',
+                    'icon'      => 'fas fa-user',
+                ],
             ],
         ],
         

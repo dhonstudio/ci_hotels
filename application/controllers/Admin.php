@@ -18,7 +18,7 @@ class Admin extends CI_Controller {
 
 		$user = $this->dhonapi->get_where('api_users', ['username' => $_SERVER['PHP_AUTH_USER']])->result_array();
 
-        if ($_SERVER['PHP_AUTH_USER'] == 'receptionist') $this->dhonauth->unauthorized();
+        if ($user[0]['type'] == 2) $this->dhonauth->unauthorized();
 		$this->dhonauth->auth('', $user[0]);
 
         $this->language['active'] = 'en';
@@ -226,11 +226,62 @@ class Admin extends CI_Controller {
         }
     }
 
+    public function receptionist()
+	{
+        $this->form_validation->set_rules('room_name', 'Room Name', 'trim|min_length[2]|max_length[50]');
+
+        if($this->form_validation->run() == false) {
+            $data = [
+                'title'	    => 'User Receptionist - Hotel',
+                'css'       => [
+                    $this->css['sb-admin'],
+                    $this->css['fontawesome5'],
+                ],
+                'body_class'    => 'sb-nav-fixed',
+                'js'            => [
+                    $this->js['jquery36'],
+                    $this->js['bootstrap-bundle5'],
+                    $this->js['sb-admin'],
+                ],
+
+                'page'          => 'Resepsionis',
+
+                'receptionist'  => $this->dhonapi->get_where('api_users', ['type' => 2])->result_array(),
+            ];
+
+            $this->load->view("ci_templates/header", $data);
+            $this->load->view("admin/topbar");
+            $this->load->view("admin/sidebar");
+            $this->load->view("admin/receptionist");
+            $this->load->view("scripts/admin");
+            $this->load->view("ci_templates/end");
+        } else {
+            $data_insert = [
+                'username' => $this->input->post('username'),
+                'password'   => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'type' => 2,
+            ];
+
+            if ($this->input->post('id_user')) {
+                $data_insert['id_user']  = $this->input->post('id_user');
+                $this->dhonapi->update('api_users', $data_insert, ['id_user' => $data_insert['id_user']]);
+            } else {
+                $data_insert['stamp']  = time();
+                $this->dhonapi->insert('api_users', $data_insert);
+            }
+            redirect('admin/receptionist');
+        }
+    }
+
     public function delete($content_type, $id_encrypt)
     {
         $id = decrypt_url($id_encrypt);
 
+        $content_type == 'api_users' ?
+        $this->dhonapi->delete($content_type, ['id_user' => $id]) :
         $this->dhonapi->delete($content_type, ['id_'.rtrim($content_type, 's') => $id]);
+        $content_type == 'api_users' ?
+        redirect('admin/receptionist') :
         redirect('admin/'.$content_type);
     }
 

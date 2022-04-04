@@ -22,6 +22,11 @@
       $('#fas_description').val('')
       $('#fas_hour1').val('08:00')
       $('#fas_hour2').val('16:00')
+    } else if (content_type == 'receptionist') {
+      $('#id_user').val('')
+      $('#rcptModalLabel').html('Tambah Resepsionis')
+      $('#username').val('')
+      $('#password').val('')
     }
 
     $('#photo').attr('required', true)
@@ -32,7 +37,6 @@
     id      = $(e).data('id')
 
     if (content_type == 'rooms') {
-      console.log('y')
       content = <?= isset($rooms) ? json_encode($rooms) : '' ?>
 
       $('#id_room').val(content[id].id_room)
@@ -58,6 +62,13 @@
       $('#fas_description').val(content[id].fas_description)
       $('#fas_hour1').val(content[id].fas_hour.split(' - ')[0])
       $('#fas_hour2').val(content[id].fas_hour.split(' - ')[1])
+    } else if (content_type == 'receptionist') {
+      content = <?= isset($receptionist) ? json_encode($receptionist) : '' ?>
+
+      $('#id_user').val(content[id].id_user)
+      $('#rcptModalLabel').html('Ubah Resepsionis')
+      $('#username').val(content[id].username)
+      $('#password').val('')
     }
 
     $('#photo').removeAttr('required')

@@ -18,7 +18,7 @@ class Receptionist extends CI_Controller {
 
 		$user = $this->dhonapi->get_where('api_users', ['username' => $_SERVER['PHP_AUTH_USER']])->result_array();
 
-        if ($_SERVER['PHP_AUTH_USER'] == 'admin') $this->dhonauth->unauthorized();
+        if ($user[0]['type'] == 1) $this->dhonauth->unauthorized();
 		$this->dhonauth->auth('', $user[0]);
 
         $this->language['active'] = 'en';
